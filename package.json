@@ -1,17 +1,17 @@
 {
-	"name": "iotc",
-	"version": "0.0.1",
-	"description": "iotc node",
-	"dependencies": {
+    "name"         : "node-red-contrib-iotc",
+    "version"      : "0.0.1",
+    "description"  : "A sample node for node-red iotc",
+    "dependencies": {
         "mqtt": "1.7.3",
         "util": "0.10.3",
         "is-utf8": "0.2.1"
-	},
-	"keywords": [ "node-red" ],
-	"node-red": {
-		"nodes": {
-			"iotc in": "iotd/10-iotf-in.js",
-			"iotc out": "iotd/10-iotf-out.js"
-		}
-	}
+    },
+    "keywords": [ "node-red" ],
+    "node-red"     : {
+        "nodes": {
+            "iotc-in": "iotc/iotc-in.js",
+            "iotc-out": "iotc/iotc-out.js"
+        }
+    }
 }

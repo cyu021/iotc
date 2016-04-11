@@ -100,11 +100,11 @@ module.exports = function(RED) {
 
         if (!this.cleansession && !this.clientid) {
             this.cleansession = true;
-            this.warn(RED._("iotf.errors.nonclean-missingclientid"));
+            this.warn(RED._("iotc.errors.nonclean-missingclientid"));
         }
 
         // Build options for passing to the MQTT.js API
-        this.options.clientId = this.clientid || 'iotf' + (1+Math.random()*4294967295).toString(16);
+        this.options.clientId = this.clientid || 'iotc' + (1+Math.random()*4294967295).toString(16);
         this.options.username = this.username;
         this.options.password = this.password;
         this.options.keepalive = this.keepalive;
@@ -159,7 +159,7 @@ module.exports = function(RED) {
                 node.client.on('connect', function () {
                     node.connecting = false;
                     node.connected = true;
-                    node.log(RED._("iotf.state.connected",{broker:(node.clientid?node.clientid+"@":"")+node.brokerurl}));
+                    node.log(RED._("iotc.state.connected",{broker:(node.clientid?node.clientid+"@":"")+node.brokerurl}));
                     for (var id in node.users) {
                         if (node.users.hasOwnProperty(id)) {
                             node.users[id].status({fill:"green",shape:"dot",text:"common.status.connected"});
@@ -197,14 +197,14 @@ module.exports = function(RED) {
                 node.client.on('close', function () {
                     if (node.connected) {
                         node.connected = false;
-                        node.log(RED._("iotf.state.disconnected",{broker:(node.clientid?node.clientid+"@":"")+node.brokerurl}));
+                        node.log(RED._("iotc.state.disconnected",{broker:(node.clientid?node.clientid+"@":"")+node.brokerurl}));
                         for (var id in node.users) {
                             if (node.users.hasOwnProperty(id)) {
                                 node.users[id].status({fill:"red",shape:"ring",text:"common.status.disconnected"});
                             }
                         }
                     } else if (node.connecting) {
-                        node.log(RED._("iotf.state.connect-failed",{broker:(node.clientid?node.clientid+"@":"")+node.brokerurl}));
+                        node.log(RED._("iotc.state.connect-failed",{broker:(node.clientid?node.clientid+"@":"")+node.brokerurl}));
                     }
                 });
 
@@ -294,7 +294,7 @@ module.exports = function(RED) {
 
     }
 
-    RED.nodes.registerType("iotf-broker-out",IOTFBrokerNode,{
+    RED.nodes.registerType("iotc-broker-out",IOTFBrokerNode,{
         credentials: {
             user: {type:"text"},
             password: {type: "password"}
@@ -336,7 +336,7 @@ module.exports = function(RED) {
                     if (msg.hasOwnProperty("topic") && (typeof msg.topic === "string") && (msg.topic !== "")) { // topic must exist
                         this.brokerConn.publish(msg);  // send the message
                     }
-                    else { node.warn(RED._("iotf.errors.invalid-topic")); }
+                    else { node.warn(RED._("iotc.errors.invalid-topic")); }
                 }
             });
             if (this.brokerConn.connected) {
@@ -347,8 +347,8 @@ module.exports = function(RED) {
                 node.brokerConn.deregister(node,done);
             });
         } else {
-            this.error(RED._("iotf.errors.missing-config"));
+            this.error(RED._("iotc.errors.missing-config"));
         }
     }
-    RED.nodes.registerType("iotf out",IOTFOutNode);
+    RED.nodes.registerType("iotc out",IOTFOutNode);
 };

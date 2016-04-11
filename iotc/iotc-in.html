@@ -11,56 +11,41 @@
   limitations under the License.
 -->
 
-<script type="text/x-red" data-template-name="iotf out">
+<script type="text/x-red" data-template-name="iotc in">
     <div class="form-row">
-        <label for="node-input-broker"><i class="fa fa-globe"></i> <span data-i18n="iotf.label.broker"></span></label>
+        <label for="node-input-broker"><i class="fa fa-globe"></i> <span data-i18n="iotc-in.label.broker"></span></label>
         <input type="text" id="node-input-broker">
     </div>
     <div class="form-row">
-        <label for="node-input-groupId"><i class="fa fa-tasks"></i> <span data-i18n="iotf.label.groupId"></span></label>
-        <input type="text" id="node-input-groupId" data-i18n="[placeholder]iotf.label.groupId">
+        <label for="node-input-groupId"><i class="fa fa-tasks"></i> <span data-i18n="iotc-in.label.groupId"></span></label>
+        <input type="text" id="node-input-groupId" data-i18n="[placeholder]iotc-in.label.groupId">
     </div>
     <div class="form-row">
-        <label for="node-input-userId"><i class="fa fa-tasks"></i> <span data-i18n="iotf.label.deviceId"></span></label>
-        <input type="text" id="node-input-userId" data-i18n="[placeholder]iotf.label.deviceId">
+        <label for="node-input-userId"><i class="fa fa-tasks"></i> <span data-i18n="iotc-in.label.deviceId"></span></label>
+        <input type="text" id="node-input-userId" data-i18n="[placeholder]iotc-in.label.deviceId">
     </div>
     <div class="form-row">
-        <label for="node-input-msgType"><i class="fa fa-tasks"></i> <span data-i18n="iotf.label.msgTypeL"></span></label>
-        <input type="text" id="node-input-msgType" data-i18n="[placeholder]iotf.label.msgTypeC">
+        <label for="node-input-msgType"><i class="fa fa-tasks"></i> <span data-i18n="iotc-in.label.msgTypeL"></span></label>
+        <input type="text" id="node-input-msgType" data-i18n="[placeholder]iotc-in.label.msgTypeC">
     </div>
     <div class="form-row">
-        <label for="node-input-category"><i class="fa fa-tasks"></i> <span data-i18n="iotf.label.category"></span></label>
-        <input type="text" id="node-input-category" data-i18n="[placeholder]iotf.label.category">
-    </div>
-    <div class="form-row">
-        <label for="node-input-qos"><i class="fa fa-empire"></i> <span data-i18n="iotf.label.qos"></span></label>
-        <select id="node-input-qos" style="width:125px !important">
-            <option value=""></option>
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-        </select>
-        &nbsp;&nbsp;<i class="fa fa-history"></i>&nbsp;<span data-i18n="iotf.retain"></span> &nbsp;<select id="node-input-retain" style="width:125px !important">
-            <option value=""></option>
-            <option value="false" data-i18n="iotf.false"></option>
-            <option value="true" data-i18n="iotf.true"></option>
-        </select>
+        <label for="node-input-category"><i class="fa fa-tasks"></i> <span data-i18n="iotc-in.label.category"></span></label>
+        <input type="text" id="node-input-category" data-i18n="[placeholder]iotc-in.label.category">
     </div>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="common.label.name"></span></label>
         <input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name">
     </div>
-    <div class="form-tips"><span data-i18n="iotf.tip"></span></div>
 </script>
 
-<script type="text/x-red" data-help-name="iotf out">
-    <p>Connects to a MQTT broker and publishes <b>msg.payload</b> either to the <b>msg.topic</b> or to the topic specified in the edit window. The value in the edit window has precedence.</p>
-    <p>Likewise QoS and/or retain values in the edit panel will overwrite any <b>msg.qos</b> and <b>msg.retain</b> properties. If nothing is set they default to <i>0</i> and <i>false</i> respectively.</p>
-    <p>If <b>msg.payload</b> contains an object it will be stringified before being sent.</p>
+<script type="text/x-red" data-help-name="iotc in">
+    <p>MQTT input node. Connects to a broker and subscribes to the specified topic. The topic may contain MQTT wildcards.</p>
+    <p>Outputs an object called <b>msg</b> containing <b>msg.topic, msg.payload, msg.qos</b> and <b>msg.retain</b>.</p>
+    <p><b>msg.payload</b> is usually a string, but can also be a binary buffer.</p>
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('iotf out',{
+    RED.nodes.registerType('iotc in',{
         category: '_00',
         defaults: {
             name: {value:""},
@@ -68,17 +53,14 @@
             userId: {value:"",required:true},
             msgType: {value:"",required:true},
             category: {value:"",required:true},
-            qos: {value:""},
-            retain: {value:""},
-            broker: {type:"iotf-broker", required:true}
+            broker: {type:"iotc-broker-in", required:true}
         },
         color:"#d8bfd8",
-        inputs:1,
-        outputs:0,
+        inputs:0,
+        outputs:1,
         icon: "bridge.png",
-        align: "right",
         label: function() {
-            return this.name||this.topic||"iotf";
+            return this.name||this.topic||"iotc";
         },
         labelStyle: function() {
             return this.name?"node_label_italic":"";
@@ -86,39 +68,39 @@
     });
 </script>
 
-<script type="text/x-red" data-template-name="iotf-broker-out">
+<script type="text/x-red" data-template-name="iotc-broker-in">
     <div class="form-row">
-        <ul style="background: #fff; min-width: 600px; margin-bottom: 20px;" id="node-config-iotf-broker-tabs"></ul>
+        <ul style="background: #fff; min-width: 600px; margin-bottom: 20px;" id="node-config-iotc-broker-tabs"></ul>
     </div>
-    <div id="node-config-iotf-broker-tabs-content" style="min-height: 170px;">
-        <div id="iotf-broker-tab-connection" style="display:none">
+    <div id="node-config-iotc-broker-tabs-content" style="min-height: 170px;">
+        <div id="iotc-broker-tab-connection" style="display:none">
             <div class="form-row node-input-broker">
-                <label for="node-config-input-broker"><i class="fa fa-globe"></i> <span data-i18n="iotf.label.broker"></span></label>
+                <label for="node-config-input-broker"><i class="fa fa-globe"></i> <span data-i18n="iotc-in.label.broker"></span></label>
                 <input class="input-append-left" type="text" id="node-config-input-broker" placeholder="imaserver" style="width: 40%;" >
-                <label for="node-config-input-port" style="margin-left: 10px; width: 35px; "> <span data-i18n="iotf.label.port"></span></label>
-                <input type="text" id="node-config-input-port" data-i18n="[placeholder]iotf.label.port" style="width:45px">
+                <label for="node-config-input-port" style="margin-left: 10px; width: 35px; "> <span data-i18n="iotc-in.label.port"></span></label>
+                <input type="text" id="node-config-input-port" data-i18n="[placeholder]iotc-in.label.port" style="width:45px">
             </div>
             <!--
             <div class="form-row">
-                <label for="node-config-input-clientid"><i class="fa fa-tag"></i> <span data-i18n="iotf.label.clientid"></span></label>
-                <input type="text" id="node-config-input-clientid" data-i18n="[placeholder]iotf.placeholder.clientid">
+                <label for="node-config-input-clientid"><i class="fa fa-tag"></i> <span data-i18n="iotc-in.label.clientid"></span></label>
+                <input type="text" id="node-config-input-clientid" data-i18n="[placeholder]iotc-in.placeholder.clientid">
             </div>
             -->
 
             <div class="form-row">
-                <label for="node-config-input-keepalive" style="width: auto"><i class="fa fa-clock-o"></i> <span data-i18n="iotf.label.keepalive"></span></label>
+                <label for="node-config-input-keepalive" style="width: auto"><i class="fa fa-clock-o"></i> <span data-i18n="iotc-in.label.keepalive"></span></label>
                 <input type="text" id="node-config-input-keepalive" style="width: 50px">
                 <input type="checkbox" id="node-config-input-cleansession" style="margin-left: 30px; height: 1em;display: inline-block; width: auto; vertical-align: middle;">
-                <label for="node-config-input-cleansession" style="width: auto;" data-i18n="iotf.label.cleansession"></label>
+                <label for="node-config-input-cleansession" style="width: auto;" data-i18n="iotc-in.label.cleansession"></label>
             </div>
             <div class="form-row">
                 <input type="checkbox" id="node-config-input-compatmode" style="display: inline-block; width: auto; vertical-align: top;">
-                <label for="node-config-input-compatmode" style="width: auto;" data-i18n="iotf.label.compatmode"></label>
+                <label for="node-config-input-compatmode" style="width: auto;" data-i18n="iotc-in.label.compatmode"></label>
             </div>
         </div>
-        <div id="iotf-broker-tab-security" style="display:none">
+        <div id="iotc-broker-tab-security" style="display:none">
             <div class="form-row">
-                <label for="node-config-input-user"><i class="fa fa-user"></i> <span data-i18n="iotf.label.userId"></span></label>
+                <label for="node-config-input-user"><i class="fa fa-user"></i> <span data-i18n="iotc-in.label.userId"></span></label>
                 <input type="text" id="node-config-input-user">
             </div>
             <div class="form-row">
@@ -128,30 +110,30 @@
             <!--
             <div class="form-row">
                 <input type="checkbox" id="node-config-input-usetls" style="display: inline-block; width: auto; vertical-align: top;">
-                <label for="node-config-input-usetls" style="width: 70%;" data-i18n="iotf.label.use-tls"></label>
+                <label for="node-config-input-usetls" style="width: 70%;" data-i18n="iotc-in.label.use-tls"></label>
             </div>
             <div class="form-row">
                 <input type="checkbox" id="node-config-input-verifyservercert" style="display: inline-block; width: auto; vertical-align: top;">
-                <label for="node-config-input-verifyservercert" style="width: 70%;" data-i18n="iotf.label.verify-server-cert"></label>
+                <label for="node-config-input-verifyservercert" style="width: 70%;" data-i18n="iotc-in.label.verify-server-cert"></label>
             </div>
             -->
         </div>
         <!--
-        <div id="iotf-broker-tab-birth" style="display:none">
+        <div id="iotc-broker-tab-birth" style="display:none">
             <div class="form-row">
                 <label for="node-config-input-birthTopic"><i class="fa fa-tasks"></i> <span data-i18n="common.label.topic"></span></label>
-                <input type="text" id="node-config-input-birthTopic" data-i18n="[placeholder]iotf.placeholder.birth-topic">
+                <input type="text" id="node-config-input-birthTopic" data-i18n="[placeholder]iotc-in.placeholder.birth-topic">
             </div>
             <div class="form-row">
-                <label for="node-config-input-birthQos"><i class="fa fa-empire"></i> <span data-i18n="iotf.label.qos"></span></label>
+                <label for="node-config-input-birthQos"><i class="fa fa-empire"></i> <span data-i18n="iotc-in.label.qos"></span></label>
                 <select id="node-config-input-birthQos" style="width:125px !important">
                     <option value="0">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                 </select>
-                &nbsp;&nbsp;<i class="fa fa-history"></i>&nbsp;<span data-i18n="iotf.retain"></span> &nbsp;<select id="node-config-input-birthRetain" style="width:125px !important">
-                    <option value="false" data-i18n="iotf.false"></option>
-                    <option value="true" data-i18n="iotf.true"></option>
+                &nbsp;&nbsp;<i class="fa fa-history"></i>&nbsp;<span data-i18n="iotc-in.retain"></span> &nbsp;<select id="node-config-input-birthRetain" style="width:125px !important">
+                    <option value="false" data-i18n="iotc-in.false"></option>
+                    <option value="true" data-i18n="iotc-in.true"></option>
                 </select>
             </div>
             <div class="form-row">
@@ -159,21 +141,21 @@
                 <input type="text" id="node-config-input-birthPayload" data-i18n="[placeholder]common.label.payload">
             </div>
         </div>
-        <div id="iotf-broker-tab-will" style="display:none">
+        <div id="iotc-broker-tab-will" style="display:none">
             <div class="form-row">
                 <label for="node-config-input-willTopic"><i class="fa fa-tasks"></i> <span data-i18n="common.label.topic"></span></label>
-                <input type="text" id="node-config-input-willTopic" data-i18n="[placeholder]iotf.placeholder.will-topic">
+                <input type="text" id="node-config-input-willTopic" data-i18n="[placeholder]iotc-in.placeholder.will-topic">
             </div>
             <div class="form-row">
-                <label for="node-config-input-willQos"><i class="fa fa-empire"></i> <span data-i18n="iotf.label.qos"></span></label>
+                <label for="node-config-input-willQos"><i class="fa fa-empire"></i> <span data-i18n="iotc-in.label.qos"></span></label>
                 <select id="node-config-input-willQos" style="width:125px !important">
                     <option value="0">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                 </select>
-                &nbsp;&nbsp;<i class="fa fa-history"></i>&nbsp;<span data-i18n="iotf.retain"></span> &nbsp;<select id="node-config-input-willRetain" style="width:125px !important">
-                    <option value="false" data-i18n="iotf.false"></option>
-                    <option value="true" data-i18n="iotf.true"></option>
+                &nbsp;&nbsp;<i class="fa fa-history"></i>&nbsp;<span data-i18n="iotc-in.retain"></span> &nbsp;<select id="node-config-input-willRetain" style="width:125px !important">
+                    <option value="false" data-i18n="iotc-in.false"></option>
+                    <option value="true" data-i18n="iotc-in.true"></option>
                 </select>
             </div>
             <div class="form-row">
@@ -189,7 +171,7 @@
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('iotf-broker-out',{
+    RED.nodes.registerType('iotc-broker-in',{
         category: 'config',
         defaults: {
             broker: {value:"imaserver",required:true},
@@ -226,28 +208,28 @@
         },
         oneditprepare: function () {
             var tabs = RED.tabs.create({
-                id: "node-config-iotf-broker-tabs",
+                id: "node-config-iotc-broker-tabs",
                 onchange: function(tab) {
-                    $("#node-config-iotf-broker-tabs-content").children().hide();
+                    $("#node-config-iotc-broker-tabs-content").children().hide();
                     $("#" + tab.id).show();
                 }
             });
             tabs.addTab({
-                id: "iotf-broker-tab-connection",
-                label: this._("iotf.tabs-label.connection")
+                id: "iotc-broker-tab-connection",
+                label: this._("iotc-in.tabs-label.connection")
             });
             tabs.addTab({
-                id: "iotf-broker-tab-security",
-                label: this._("iotf.tabs-label.security")
+                id: "iotc-broker-tab-security",
+                label: this._("iotc-in.tabs-label.security")
             });
             /**
             tabs.addTab({
-                id: "iotf-broker-tab-birth",
-                label: this._("iotf.tabs-label.birth")
+                id: "iotc-broker-tab-birth",
+                label: this._("iotc-in.tabs-label.birth")
             });
             tabs.addTab({
-                id: "iotf-broker-tab-will",
-                label: this._("iotf.tabs-label.will")
+                id: "iotc-broker-tab-will",
+                label: this._("iotc-in.tabs-label.will")
             });
             */
             setTimeout(function() { tabs.resize()},0);
@@ -296,9 +278,9 @@
             var node = this;
             function updateClientId() {
                 if ($("#node-config-input-cleansession").is(":checked")) {
-                    $("#node-config-input-clientid").attr("placeholder",node._("iotf.placeholder.clientid"));
+                    $("#node-config-input-clientid").attr("placeholder",node._("iotc-in.placeholder.clientid"));
                 } else {
-                    $("#node-config-input-clientid").attr("placeholder",node._("iotf.placeholder.clientid-nonclean"));
+                    $("#node-config-input-clientid").attr("placeholder",node._("iotc-in.placeholder.clientid-nonclean"));
                 }
                 $("#node-config-input-clientid").change();
             }
