@@ -1,0 +1,14 @@
+{
+	"name": "iotc",
+	"version": "0.0.1",
+	"description": "iotc node",
+	"dependencies": {
+		
+	},
+	"keywords": [ "node-red" ],
+	"node-red": {
+		"nodes": {
+			"iotc": "iotd/10-iotf.js"
+		}
+	}
+}
