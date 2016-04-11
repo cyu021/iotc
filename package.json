@@ -3,7 +3,9 @@
 	"version": "0.0.1",
 	"description": "iotc node",
 	"dependencies": {
-		
+        "mqtt": "1.7.3",
+        "util": "0.10.3",
+        "is-utf8": "0.2.1"
 	},
 	"keywords": [ "node-red" ],
 	"node-red": {
