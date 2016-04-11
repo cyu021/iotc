@@ -68,82 +68,7 @@
     });
 </script>
 
-<script type="text/x-red" data-template-name="iotf out">
-    <div class="form-row">
-        <label for="node-input-broker"><i class="fa fa-globe"></i> <span data-i18n="iotf.label.broker"></span></label>
-        <input type="text" id="node-input-broker">
-    </div>
-    <div class="form-row">
-        <label for="node-input-groupId"><i class="fa fa-tasks"></i> <span data-i18n="iotf.label.groupId"></span></label>
-        <input type="text" id="node-input-groupId" data-i18n="[placeholder]iotf.label.groupId">
-    </div>
-    <div class="form-row">
-        <label for="node-input-userId"><i class="fa fa-tasks"></i> <span data-i18n="iotf.label.deviceId"></span></label>
-        <input type="text" id="node-input-userId" data-i18n="[placeholder]iotf.label.deviceId">
-    </div>
-    <div class="form-row">
-        <label for="node-input-msgType"><i class="fa fa-tasks"></i> <span data-i18n="iotf.label.msgTypeL"></span></label>
-        <input type="text" id="node-input-msgType" data-i18n="[placeholder]iotf.label.msgTypeC">
-    </div>
-    <div class="form-row">
-        <label for="node-input-category"><i class="fa fa-tasks"></i> <span data-i18n="iotf.label.category"></span></label>
-        <input type="text" id="node-input-category" data-i18n="[placeholder]iotf.label.category">
-    </div>
-    <div class="form-row">
-        <label for="node-input-qos"><i class="fa fa-empire"></i> <span data-i18n="iotf.label.qos"></span></label>
-        <select id="node-input-qos" style="width:125px !important">
-            <option value=""></option>
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-        </select>
-        &nbsp;&nbsp;<i class="fa fa-history"></i>&nbsp;<span data-i18n="iotf.retain"></span> &nbsp;<select id="node-input-retain" style="width:125px !important">
-            <option value=""></option>
-            <option value="false" data-i18n="iotf.false"></option>
-            <option value="true" data-i18n="iotf.true"></option>
-        </select>
-    </div>
-    <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="common.label.name"></span></label>
-        <input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name">
-    </div>
-    <div class="form-tips"><span data-i18n="iotf.tip"></span></div>
-</script>
-
-<script type="text/x-red" data-help-name="iotf out">
-    <p>Connects to a MQTT broker and publishes <b>msg.payload</b> either to the <b>msg.topic</b> or to the topic specified in the edit window. The value in the edit window has precedence.</p>
-    <p>Likewise QoS and/or retain values in the edit panel will overwrite any <b>msg.qos</b> and <b>msg.retain</b> properties. If nothing is set they default to <i>0</i> and <i>false</i> respectively.</p>
-    <p>If <b>msg.payload</b> contains an object it will be stringified before being sent.</p>
-</script>
-
-<script type="text/javascript">
-    RED.nodes.registerType('iotf out',{
-        category: '_00',
-        defaults: {
-            name: {value:""},
-            groupId: {value:"",required:true},
-            userId: {value:"",required:true},
-            msgType: {value:"",required:true},
-            category: {value:"",required:true},
-            qos: {value:""},
-            retain: {value:""},
-            broker: {type:"iotf-broker", required:true}
-        },
-        color:"#d8bfd8",
-        inputs:1,
-        outputs:0,
-        icon: "bridge.png",
-        align: "right",
-        label: function() {
-            return this.name||this.topic||"iotf";
-        },
-        labelStyle: function() {
-            return this.name?"node_label_italic":"";
-        }
-    });
-</script>
-
-<script type="text/x-red" data-template-name="iotf-broker">
+<script type="text/x-red" data-template-name="iotf-broker-in">
     <div class="form-row">
         <ul style="background: #fff; min-width: 600px; margin-bottom: 20px;" id="node-config-iotf-broker-tabs"></ul>
     </div>
@@ -246,7 +171,7 @@
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('iotf-broker',{
+    RED.nodes.registerType('iotf-broker-in',{
         category: 'config',
         defaults: {
             broker: {value:"imaserver",required:true},

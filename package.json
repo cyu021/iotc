@@ -10,7 +10,8 @@
 	"keywords": [ "node-red" ],
 	"node-red": {
 		"nodes": {
-			"iotc": "iotd/10-iotf.js"
+			"iotc in": "iotd/10-iotf-in.js",
+			"iotc out": "iotd/10-iotf-out.js"
 		}
 	}
 }
